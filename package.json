@@ -1,0 +1,20 @@
+{
+  "name": "my_climate_control",
+  "version": "1.0.0",
+  "description": "control personal climate controls in home assistat via alexa",
+  "main": "lambda.js",
+  "author": "Tomer Figenblat",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TomerFi/home_assistant_custom_ac_alexa_smarthome_skill.git"
+  },
+  "homepage": "https://github.com/TomerFi/home_assistant_custom_ac_alexa_smarthome_skill",
+  "keywords": [],
+  "bugs": "tomer.figenblat@gmail.com",
+  "contributors": [],
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}

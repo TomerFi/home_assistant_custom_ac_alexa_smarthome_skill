@@ -1,0 +1,5 @@
+{
+	"api_url": "https://$my_ha_address$.duckdns.org",
+	"api_port": 443,
+	"api_password": "$my_api_password$"
+}
