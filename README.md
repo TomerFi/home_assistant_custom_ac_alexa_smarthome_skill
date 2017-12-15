@@ -87,7 +87,7 @@ Our temperature controller is an *input_text*, let's create a sensor for it so i
       value_template: "{{ states.input_text.lr_ac_temp_text.state }}"
 ```
 ##### Cover Template
-Let's create a cover template so we can control our temperature entity and now allow any out of range temperature set:</br>
+Let's create a cover template so we can control our temperature entity and now allow any out of range temperature set, please note that my ac unit's temeprature range is 16-32, you can change these values if needed:</br>
 ```yaml
 # covers.yaml
 - platform: template
@@ -104,6 +104,18 @@ Let's create a cover template so we can control our temperature entity and now a
         data_template:
           entity_id: input_text.lr_ac_temp_text
           value: "{{ [((states.input_text.lr_ac_temp_text.state | int) - 1), 16] | max }}"
+```
+#### Group Our Controllers
+To create a panel to show in home assistant, we'll group our created entities, please note that I didn't include the input_text entity, I've used the template sensor instead:</br>
+```yaml
+living_room_ac:
+  name: living_room_ac
+  entities:
+    - input_boolean.lr_ac_status
+    - sensor.lr_ac_temp_sensor
+    - cover.lr_ac_temp_cover
+    - input_select.lr_ac_mode
+    - input_select.lr_ac_fan
 ```
 
 ## Alexa Stuff
