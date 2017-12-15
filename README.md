@@ -35,8 +35,9 @@ In my case, I had all the code packets already in my broadlink app, so it didn't
 Once you have all your code packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
 ## Home Assistant Stuff
+### Create the entities
 Let's breakdown our ac unit controllers to home assistant entities...</br>
-### Fan Control
+#### Fan Control
 The first controller we'll create is the Fan controller, which is basically an *input_select* entity:</br>
 ```yaml
 # input_select.yaml
@@ -48,7 +49,7 @@ lr_ac_fan:
     - HIGH
     - AUTO
 ```
-### Mode Control
+#### Mode Control
 The second controller we'll create is the Mode controller, which is also going to be an *input_select* entity:</br>
 ```yaml
 # input_select.yaml
@@ -58,14 +59,14 @@ lr_ac_mode:
     - COOL
     - HEAT
 ```
-### Temperature Control
+#### Temperature Control
 The third controller we'll create is the Temperature controller, we're going to use an *input_text* entity for this one:</br>
 ```yaml
 # input_text.yaml
 lr_ac_temp_text:
   name: lr_ac_temp_text
 ```
-### Power Control
+#### Power Control
 The fourth controller will be the power controller, we'll use an *input_boolean* entity:</br>
 ```yaml
 # input_boolean.yaml
@@ -73,10 +74,10 @@ lr_ac_status:
   name: "lr_ac_status"
   initial: off
 ```
-### Let's get fancy with our controllers
+#### Let's get fancy with our controllers
 Actually, these four controllers is all we need, but let's make out ac panel look better.</br>
 
-#### Sensor Template
+##### Sensor Template
 Our temperature controller is an *input_text*, let's create a sensor for it so it will look a little better:</br>
 ```yaml
 # sensors.yaml
@@ -85,7 +86,7 @@ Our temperature controller is an *input_text*, let's create a sensor for it so i
     lr_ac_temp_sensor:
       value_template: "{{ states.input_text.lr_ac_temp_text.state }}"
 ```
-#### Cover Template
+##### Cover Template
 Let's create a cover template so we can control our temperature entity and now allow any out of range temperature set:</br>
 ```yaml
 # covers.yaml
