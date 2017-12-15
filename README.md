@@ -37,8 +37,9 @@ Once you have all your code packets ready, you can jump to the fun stuff... conf
 ## Home Assistant Stuff
 Let's breakdown our ac unit controllers to home assistant entities...</br>
 ### Fan Control
-The first control we'll create is the Fan controller, which is basically an *input_select* entity:</br>
+The first controller we'll create is the Fan controller, which is basically an *input_select* entity:</br>
 ```yaml
+# input_select.yaml
 lr_ac_fan:
   name: lr_ac_fan
   options:
@@ -48,18 +49,60 @@ lr_ac_fan:
     - AUTO
 ```
 ### Mode Control
-The second control we'll create is the Mode controller, which is also going to be an *input_select* entity:</br>
+The second controller we'll create is the Mode controller, which is also going to be an *input_select* entity:</br>
 ```yaml
-lr_ac_state:
-  name: lr_ac_state
+# input_select.yaml
+lr_ac_mode:
+  name: lr_ac_mode
   options:
     - COOL
     - HEAT
 ```
 ### Temperature Control
-The third controll we'll create is the Temperature controller, we're going to use an *input_text* entity for this one:</br>
+The third controller we'll create is the Temperature controller, we're going to use an *input_text* entity for this one:</br>
 ```yaml
+# input_text.yaml
 lr_ac_temp_text:
   name: lr_ac_temp_text
 ```
+### Power Control
+The fourth controller will be the power controller, we'll use an *input_boolean* entity:</br>
+```yaml
+# input_boolean.yaml
+lr_ac_status:
+  name: "lr_ac_status"
+  initial: off
+```
+### Let's get fancy with our controllers
+Actually, these four controllers is all we need, but let's make out ac panel look better.</br>
+
+#### Sensor Template
+Our temperature controller is an *input_text*, let's create a sensor for it so it will look a little better:</br>
+```yaml
+# sensors.yaml
+- platform: template
+  sensors:
+    lr_ac_temp_sensor:
+      value_template: "{{ states.input_text.lr_ac_temp_text.state }}"
+```
+#### Cover Template
+Let's create a cover template so we can control our temperature entity and now allow any out of range temperature set:</br>
+```yaml
+# covers.yaml
+- platform: template
+  covers:
+    lr_ac_temp_cover:
+      position_template: "{% if states.sensor.lr_ac_temp_sensor ==  none %}25{% else %}{{ states.sensor.lr_ac_temp_sensor.state | int }}{% endif %}"
+      open_cover:
+        service: input_text.set_value
+        data_template:
+          entity_id: input_text.lr_ac_temp_text
+          value: "{{ [((states.input_text.lr_ac_temp_text.state | int) + 1), 32] | min }}"
+      close_cover:
+        service: input_text.set_value
+        data_template:
+          entity_id: input_text.lr_ac_temp_text
+          value: "{{ [((states.input_text.lr_ac_temp_text.state | int) - 1), 16] | max }}"
+```
+
 ## Alexa Stuff
