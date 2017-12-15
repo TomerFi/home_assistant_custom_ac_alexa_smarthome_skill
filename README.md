@@ -4,7 +4,7 @@
 # home_assistant_custom_ac_alexa_smarthome_skill
 Alexa smart home skill hosted on lambda servers for controlling a custom ir air conditioner build with Home Assistant controls.
 I want to tell you a little bit about the why I decided to create this skill I actually waited a long time before I could find the time to work on this project, and it's actually my first alexa smart home skill, I've made a couple of custom skills, but this if my first smart home skill... so forgive me if I seem a bit too excited. ;-)</br>
-You can check out the skill in action [here](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc).
+You can check out the skill in action [here](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc) and check out the end result in home assistant [here](ha-ac.jpg).
 
 
 ## Background
