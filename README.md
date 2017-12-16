@@ -37,6 +37,8 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
 - [Alexa Smart Home Skill](#alexa-smart-home-skill)
   - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
     - [Configuring Node JS](#configuring-node-js)
+  - [Configuring the skill](#configuring-the-skill)
+  - [Configuring the skill interface](#configuring-the-skill-interface)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -518,6 +520,15 @@ There are a couple of things you need before running this skill:</br>
 - The skill is written *JavaScript* (there is no need for any prior knowledge in JS) and packaged with *Node Package Manager*, you will need to download and configure *Node JS* on your computer in order to compile the package.
 
 #### Configuring Node JS
-Download and install [Node JS] (which includes npm)for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
+Download and install [Node JS] (which includes npm) for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
 Locate the *Path* variable and add a new entry with the path of your Node JS installations, (for example - C:\Program Files\nodejs\).</br>
 To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed.</br>
+### Configuring the skill
+
+### Configuring the skill interface
+In [Amazon Developer Portal](https://developer.amazon.com/), sign in, click the *DEVELOPER CONSOLE*, the *ALEXA* tab and under *Alexa Skills Kit* click *Get Started*.</br>
+In skill management window, click *Add a New Skill* and configure you skill accoaring to the following with one rule, if I didn't mentioned a setting, leave it with its default value:</br>
+#### Skill Information
+- Skill Type: Smart Home Skill API
+- Name: What ever you want, just keep in mind you will need to identify this skill later.
+
