@@ -35,6 +35,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
       - [Run scripts for power off](#run-scripts-for-power-off)
       - [Run scripts when the controllers change state](#run-scripts-when-the-controllers-change-state)
 - [Alexa Smart Thermostat](#alexa-smart-thermostat)
+  - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -500,3 +501,13 @@ That's it. You can now control your ac unit with Home Assistant and broadlink de
 
 Now, jump over to the Alexa section which covers "binding" the controller entities in Home Assistant to a Smart Thermostat for Alexa.
 ## Alexa Smart Thermostat
+Alexa Smart Home Skill allows us to configure smart home devices for nativly controlling with alexa, such such a deivce, from alexa's point of view is called *endpoint*.</br>
+This section will guide you on building a Smart Home Skill that will bind the Home Assistant entities as and endpoint of type Smart Thermostat, allowing controlling the ac unit nativly:</br>
+- Alexa, turn on the *endpoint name*
+- Alexa, set the temperature of the *endpoint name* to 28
+- Alexa, set the *endpoint name* to heat
+- Alexa, what is the temperature of the *endpoint name*
+
+Please note, a basic thermostat usually contains a temperature, mode and power settings. The fan settings doesn't exists. Therefore you will not be able to control the fan level with alexa for now, but I'm working on a workaroung for it. I will update this repository as soon as I'll have it working.</br>
+For now, controlling the power, mode and temperature settings nativly with alexa is extremly convinient as you can see in my [youtube video](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc).</br>
+### Prerequisites for running the skill
