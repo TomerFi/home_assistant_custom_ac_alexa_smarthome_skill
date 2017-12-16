@@ -35,10 +35,13 @@ In my case, I had all the code packets already in my broadlink app, so it didn't
 Once you have all your code packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
 ## Home Assistant Stuff
-### Prepare the configuration
-I like to keep my entities orginaized, I'm using diffrent yaml files for each platform. Therefor when I reference yaml files in this readme file, it actually means I have them included in my configuration:</br>
+### Prepare our configuration
+I like to keep my entities orginaized, I'm using diffrent yaml files for each platform. Therefor when I reference a yaml files in this readme file, its actually means I have it included in my configuration:</br>
 ```yaml
 # configuration.yaml
+
+homeassistant:
+  customize: !include customize_ent.yaml
 
 input_select: !include input_select.yaml
 input_boolean: !include input_boolean.yaml
@@ -52,8 +55,7 @@ script: !include scripts.yam
 
 ### Create the entities
 Let's breakdown our ac unit controllers to home assistant entities...</br>
-
-#### Fan Control
+#### Fan control
 The first controller we'll create is the Fan controller, which is basically an *input_select* entity:</br>
 ```yaml
 # input_select.yaml
@@ -65,7 +67,7 @@ lr_ac_fan:
     - HIGH
     - AUTO
 ```
-#### Mode Control
+#### Mode control
 The second controller we'll create is the Mode controller, which is also going to be an *input_select* entity:</br>
 ```yaml
 # input_select.yaml
@@ -75,14 +77,14 @@ lr_ac_mode:
     - COOL
     - HEAT
 ```
-#### Temperature Control
+#### Temperature control
 The third controller we'll create is the Temperature controller, we're going to use an *input_text* entity for this one:</br>
 ```yaml
 # input_text.yaml
 lr_ac_temp_text:
   name: lr_ac_temp_text
 ```
-#### Power Control
+#### Power control
 The fourth controller will be the power controller, we'll use an *input_boolean* entity:</br>
 ```yaml
 # input_boolean.yaml
@@ -91,9 +93,8 @@ lr_ac_status:
   initial: off
 ```
 #### Let's get fancy with our controllers
-Actually, these four controllers is all we need, but let's make out ac panel look better.</br>
-
-##### Sensor Template
+Actually, these four controllers is all we need, but let's make our ac panel look better with a two extra entities to help hide and manage our input_text for the temperature control:.</br>
+##### Sensor template
 Our temperature controller is an *input_text*, let's create a sensor for it so it will look a little better:</br>
 ```yaml
 # sensors.yaml
@@ -102,7 +103,7 @@ Our temperature controller is an *input_text*, let's create a sensor for it so i
     lr_ac_temp_sensor:
       value_template: "{{ states.input_text.lr_ac_temp_text.state }}"
 ```
-##### Cover Template
+##### Cover template
 Let's create a cover template so we can control our temperature entity and now allow any out of range temperature set, please note that my ac unit's temeprature range is 16-32, you can change these values if needed:</br>
 ```yaml
 # covers.yaml
@@ -121,7 +122,7 @@ Let's create a cover template so we can control our temperature entity and now a
           entity_id: input_text.lr_ac_temp_text
           value: "{{ [((states.input_text.lr_ac_temp_text.state | int) - 1), 16] | max }}"
 ```
-#### Group Our Controllers
+#### Group our controllers
 To create a panel to show in home assistant, we'll group our created entities, please note that I didn't include the input_text entity, I've used the template sensor instead:</br>
 ```yaml
 living_room_ac:
@@ -133,6 +134,32 @@ living_room_ac:
     - input_select.lr_ac_mode
     - input_select.lr_ac_fan
 ```
-This is what the end result looks like in Home Assistant:
+#### Customize our entities
+Here we gonna customize our entities with names and icons:</br>
+```yaml
+#customize_ent.yaml
+input_boolean.lr_ac_status:
+  friendly_name: "Status"
+  icon: mdi:air-conditioner
+sensor.lr_ac_temp_sensor:
+  friendly_name: "Current Temperature"
+  icon: mdi:thermometer
+cover.lr_ac_temp_cover:
+  friendly_name: "Change Temperature"
+  icon: mdi:temperature-celsius
+input_select.lr_ac_mode:
+  friendly_name: "Mode"
+  icon: mdi:weather-windy-variant
+input_select.lr_ac_fan:
+  friendly_name: "Fan"
+  icon: mdi:fan
+group.living_room_ac:
+  friendly_name: "Living Room AC"
+  control: hidden
+```
+This is what the end result looks like in Home Assistant:</br>
 ![ha-ac_mockup](ha-ac.jpg)
+
+#### Customize out entities
+
 ## Alexa Stuff
