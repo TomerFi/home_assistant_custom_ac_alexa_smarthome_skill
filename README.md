@@ -133,5 +133,5 @@ living_room_ac:
     - input_select.lr_ac_mode
     - input_select.lr_ac_fan
 ```
-![this is what it looks like](ha-ac.jpg)
+![ha-ac_mockup](ha-ac.jpg, "this is what the end result looks like in ha")
 ## Alexa Stuff
