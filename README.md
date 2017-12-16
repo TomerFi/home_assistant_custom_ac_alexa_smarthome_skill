@@ -524,7 +524,36 @@ Download and install [Node JS] (which includes npm) for windows from [here](http
 Locate the *Path* variable and add a new entry with the path of your Node JS installations, (for example - C:\Program Files\nodejs\).</br>
 To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed.</br>
 ### Configuring the skill
-
+- Download this repository as a zip file and extract to a temporary folder on your windows computer.
+- Locate the extracted files and open the *conf* folder, inside you will find two *json* files: *endpoints_config* for conifguring your endpoint and *hass_api_config* for configuring you Home Assistant API access. Open both files in any text editor and modify the following values inside the quotation marks in a similiar manner to the existing example:</br>
+In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array:</br>
+``` json
+[{
+	"endpoint_unique_id": "A unique endpoint id for backend use between alexa and the skill",
+	"alexa_friendly_name": "The name of the device as you want it to be used for controlling with alexa",
+	"status_input_boolean": "The full entity id for Power Control input_boolean",
+	"degrees_control": {
+		"degrees_input_text": "The full entity id for the Temperature Control input_text",
+		"min_degree": the minimum temperature accepted by your ac unit - no quotation marks required,
+		"max_degree": the maximum temperature accepted by your ac unit - no quotation marks required
+	},
+	"mode_input_select": "The full entity id for the Mode Control input_select"
+}]
+```
+In hass_api_config.json, configure your Home Assistant API:</br>
+```json
+{
+	"api_url": "Your ha address (please use a fixed dns name and not an interchangeable address) for example https://my-ha.duckdns.org",
+	"api_port": The port accisble to your ha - no quotation marks required for example 443,
+	"api_password": "Your ha api_password"
+}
+```
+- Open Command Prompt with administrative privlieges and navigate into the folder you have extracted this reposiotory to (the path where you can find the *package.json* file.
+- Type *npm install*, npm will download the moudles required by our skill into a new folder called *node_modules*.
+- Zip the entire **content** (not the folder itself) of the folder you have extracted this reposioty to (we'll use the zip file later). The zip file should contain the following:
+  - conf
+  - node_modules
+  - lambda.js
 ### Configuring the skill interface
 In [Amazon Developer Portal](https://developer.amazon.com/), sign in, click the *DEVELOPER CONSOLE*, the *ALEXA* tab and under *Alexa Skills Kit* click *Get Started*.</br>
 In skill management window, click *Add a New Skill* and configure you skill accoaring to the following with one rule, if I didn't mentioned a setting, leave it with its default value:</br>
