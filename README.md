@@ -35,8 +35,24 @@ In my case, I had all the code packets already in my broadlink app, so it didn't
 Once you have all your code packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
 ## Home Assistant Stuff
+### Prepare the configuration
+I like to keep my entities orginaized, I'm using diffrent yaml files for each platform. Therefor when I reference yaml files in this readme file, it actually means I have them included in my configuration:</br>
+```yaml
+# configuration.yaml
+
+input_select: !include input_select.yaml
+input_boolean: !include input_boolean.yaml
+input_text: !include input_text.yaml
+cover: !include covers.yaml
+sensor: !include sensors.yaml
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yam
+```
+
 ### Create the entities
 Let's breakdown our ac unit controllers to home assistant entities...</br>
+
 #### Fan Control
 The first controller we'll create is the Fan controller, which is basically an *input_select* entity:</br>
 ```yaml
@@ -117,5 +133,5 @@ living_room_ac:
     - input_select.lr_ac_mode
     - input_select.lr_ac_fan
 ```
-
+![this is what it looks like](ha-ac.jpg)
 ## Alexa Stuff
