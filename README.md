@@ -158,4 +158,22 @@ group.living_room_ac:
 This is what the end result looks like in Home Assistant:</br>
 ![ha-ac_mockup](ha-ac.jpg)
 
+### Incorporate the IR packets
+After creating the ac control panel, the entities aren't actually doing anything, in order to make them control the ac unit, you're going to have to wrap them up with scripts and automations.</br>
+#### Scripts
+In order to make things as generic as possible to allow a quick add of more ac units, I've splited the script into multiple scripts, which will make a "chain of scripts" controlling the ac unit.</br>
+To make this chain of scripts as clear as I can, I'll start at the final script and work my way up the chain.</br>
+All the scripts resign inside the *scripts.yaml* file.
+##### Send packets to broadlink script
+The final script is prety simple, it recieves an incoming paramter called *packet_code* containing an ir packets, and register it with the designated service of your broadlink device.</br>
+Please note that service name cotnains the ip address of your broadlink device, get yours from the *services tool* in home assistant:</br>
+```yaml
+living_room_rm_pro_send_packet:
+  sequence:
+    - service: broadlink.send_packet_XXX_XXX_XXX_XXX
+      data_template:
+        packet:
+          - '{{ packet_code }}'
+```
+
 ## Alexa Stuff
