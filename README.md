@@ -5,6 +5,39 @@
 Alexa smart home skill hosted on lambda servers for controlling a custom ir air conditioner build with [Home Assistant](https://home-assistant.io/) controls.</br>
 You can check out the skill in action [here](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc) and check out the ac unit control panel in home assistant [here](ha-ac.jpg).
 
+**Table Of Contents**
+- [Background](#background)
+- [Obtain the IR packets](#obtain-the-ir-packets)
+- [Configuring Home Assistant](#configuring-home-assistant)
+  - [Preparing the configuration](#preparing-the-configuration)
+  - [Creating the entities](#create-the-entities)
+    - [Fan control](#fan-control)
+    - [Mode control](#mode-control)
+    - [Temperature control](#temperature-control)
+    - [Power control](#power-control)
+    - [Disguising the temperature](#disguising-the-temperature)
+      - [Template sensor](#template-sensor)
+      - [Template cover](#template-cover)
+    - [Grouping the controllers](#grouping-the-controllers)
+    - [Customizing the entities](#customizing-the-entities)
+  - [Incorporating the IR packets](#incorporating-the-ir-packets)
+    - [Scripts](#scripts)
+      - [Send ir packets to broadlink script](#send-ir-packets-to-broadlink-script)
+      - [Scripts for constructing the ir packet](#scripts-for-constructing-the-ir-packet)
+        - [Mode: COOL and Fan: LOW](#Mode:-cool-and-fan:-low)
+        - [Mode: COOL and Fan: MED](#Mode:-cool-and-fan:-med)
+        - [Mode: COOL and Fan: HIGH](#Mode:-cool-and-fan:-high)
+        - [Mode: COOL and Fan: AUTO](#Mode:-cool-and-fan:-auto)
+        - [Mode: HEAT and Fan: LOW](#Mode:-heat-and-fan:-low)
+        - [Mode: HEAT and Fan: MED](#Mode:-heat-and-fan:-med)
+        - [Mode: HEAT and Fan: HIGH](#Mode:-heat-and-fan:-high)
+        - [Mode: HEAT and Fan: AUTO](#Mode:-heat-and-fan:-auto)
+      - [Choose the correct ir packet constructor script](#choose-the-correct-ir-packet-constructor-script)
+    - [Automations](#automations)
+      - [Run scripts for power on](#run-scripts-for-power-on)
+      - [Run scripts for power off](#run-scripts-for-power-off)
+      - [Run scripts when the controllers change state](#run-scripts-when-the-controllers-change-state)
+- [Alexa Smart Thermostat](#alexa-smart-thermostat)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -34,7 +67,7 @@ In my case, I had all the packets already in my broadlink app, so it didn't make
 Once you have all your packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
 ## Configuring Home Assistant
-### Prepare the configuration
+### Preparing the configuration
 I like to keep my entities organized, I'm using different yaml files for each platform. Therefor when I reference a unknown yaml file, it actually means I have it included in my configuration:</br>
 ```yaml
 # configuration.yaml
@@ -51,7 +84,7 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yam
 ```
-### Create the entities
+### Creating the entities
 The basic ac unit has four controllers: fan, mode, temperature and power control. You need to create an entity for each one of these controllers:</br>
 #### Fan control
 The first controller we'll create is the Fan controller, which is going to be *input_select* entity:</br>
@@ -120,7 +153,7 @@ After disguising the *input_text* with a *sensor*, you can't actually edit the "
           entity_id: input_text.lr_ac_temp_text
           value: "{{ [((states.input_text.lr_ac_temp_text.state | int) - 1), 16] | max }}"
 ```
-#### Group the controllers
+#### Grouping the controllers
 To create a panel to show in home assistant, group the created entities, please note that I didn't include the input_text entity, I've used the template sensor and template cover instead:</br>
 ```yaml
 living_room_ac:
@@ -132,7 +165,7 @@ living_room_ac:
     - input_select.lr_ac_mode
     - input_select.lr_ac_fan
 ```
-#### Customize the entities
+#### Customizing the entities
 Customize your entities with names and icons:</br>
 ```yaml
 #customize_ent.yaml
@@ -158,7 +191,7 @@ group.living_room_ac:
 This is what the end result looks like in Home Assistant:</br>
 ![ha-ac_mockup](ha-ac.jpg)
 
-### Incorporate the IR packets
+### Incorporating the IR packets
 After creating the ac control panel, the entities aren't actually doing anything, in order to make them control the ac unit, you're going to have to wrap them up with scripts and automations. </br>
 #### Scripts
 In order to make things as generic as possible to allow a quick add of more ac units, I've split the script into multiple scripts, which will make a "chain of scripts" controlling the ac unit.</br>
@@ -179,7 +212,7 @@ living_room_rm_pro_send_packet:
 As I said before, my ac unit supports 2 modes, 4 fan levels and 17 possible degrees.</br>
 Create 8 scripts based on *mode+fan* each script contains their own 17 possible packets for the *mode+fan+chossen temperature*.</br>
 Based on the value the scripts receive with the incoming parameter named *selected_temp*, the script will call the former script setting the correct ir code in the outgoing *packet_code* parameter. You need to copy your pre-obtained ir packets within the designated *if* statement in the correct script:</br>
-###### Mode: COOL + Fan: LOW
+###### Mode: COOL and Fan: LOW
 ```yaml
 living_room_ac_cool_low_script:
   sequence:
@@ -205,7 +238,7 @@ living_room_ac_cool_low_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:LOW+temperature:32"
           {% endif %}
 ```
-###### Mode: COOL + Fan: MED
+###### Mode: COOL and Fan: MED
 ```yaml
 living_room_ac_cool_med_script:
   sequence:
@@ -231,7 +264,7 @@ living_room_ac_cool_med_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:MED+temperature:32"
           {% endif %}
 ```
-###### Mode: COOL + Fan: HIGH
+###### Mode: COOL and Fan: HIGH
 ```yaml
 living_room_ac_cool_high_script:
   sequence:
@@ -257,7 +290,7 @@ living_room_ac_cool_high_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:32"
           {% endif %}
 ```
-###### Mode: COOL + Fan: AUTO
+###### Mode: COOL and Fan: AUTO
 ```yaml
 living_room_ac_cool_auto_script:
   sequence:
@@ -283,7 +316,7 @@ living_room_ac_cool_auto_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:32"
           {% endif %}
 ```
-###### Mode: HEAT + Fan: LOW
+###### Mode: HEAT and Fan: LOW
 ```yaml
 living_room_ac_heat_low_script:
   sequence:
@@ -309,7 +342,7 @@ living_room_ac_heat_low_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:32"
           {% endif %}
 ```
-###### Mode: HEAT + Fan: MED
+###### Mode: HEAT and Fan: MED
 ```yaml
 living_room_ac_heat_med_script:
   sequence:
@@ -335,7 +368,7 @@ living_room_ac_heat_med_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:MED+temperature:32"
           {% endif %}
 ```
-###### Mode: HEAT + Fan: HIGH
+###### Mode: HEAT and Fan: HIGH
 ```yaml
 living_room_ac_heat_high_script:
   sequence:
@@ -361,7 +394,7 @@ living_room_ac_heat_high_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:32"
           {% endif %}
 ```
-###### Mode: HEAT + Fan: AUTO
+###### Mode: HEAT and Fan: AUTO
 ```yaml
 living_room_ac_heat_auto_script:
   sequence:
