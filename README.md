@@ -164,7 +164,7 @@ After creating the ac control panel, the entities aren't actually doing anything
 In order to make things as generic as possible to allow a quick add of more ac units, I've splited the script into multiple scripts, which will make a "chain of scripts" controlling the ac unit.</br>
 To make this chain of scripts as clear as I can, I'll start at the final script and work my way up the chain.</br>
 All the scripts resign inside the *scripts.yaml* file.
-##### Send packets to broadlink script
+##### Send ir packets to broadlink script
 The final script is prety simple, it recieves an incoming paramter called *packet_code* containing an ir packets, and register it with the designated service of your broadlink device.</br>
 Please note that service name cotnains the ip address of your broadlink device, get yours from the *services tool* in home assistant:</br>
 ```yaml
@@ -175,7 +175,7 @@ living_room_rm_pro_send_packet:
         packet:
           - '{{ packet_code }}'
 ```
-##### Constructing the correct packet
+##### Scripts for constructing the ir packet
 As I said before, my ac unit supports 2 mode, 4 fan levels and 17 possible degrees.</br>
 Create 8 scripts based on *mode+fan* each script contains thier designated 17 possible packets for the *mode+fan+chossen temperature*.</br>
 Based on the value the scripts recives with incoming parameter named *selected_temp*, the script will call the *send packets to broadlink script* setting the corrent ir code in the outgoing *packet_code* paramter. You need to copy your pre-obtained ir packets within the deisganted *if* statement in the correct script:</br>
@@ -387,5 +387,29 @@ living_room_ac_heat_auto_script:
           {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:32"
           {% endif %}
 ```
+##### Choose the correct ir packet constructor script
+Create a script that calls the correct ir packet constructing script. The script recieves three incoming parameters: *selected_mode* and *selected_fan* will be used to determain the correct script to run, the *selected_temp* parameter will be passed throu to to the called script:</br>
+```yaml
+living_room_ac_check_state_script:
+  sequence:
+    - service_template: >
+        {% if (selected_mode.lower() == "cool") %}
+          {% if (selected_fan.lower() == "low") %} script.living_room_ac_cool_low_script
+          {% elif (selected_fan.lower() == "med") %} script.living_room_ac_cool_medium_script
+          {% elif (selected_fan.lower() == "high") %} script.living_room_ac_cool_high_script
+          {% elif (selected_fan.lower() == "auto") %} script.living_room_ac_cool_auto_script
+          {% endif %}
+        {%-elif (selected_mode.lower() == "heat") %}
+          {% if (selected_fan.lower() == "low") %} script.living_room_ac_heat_low_script
+          {% elif (selected_fan.lower() == "med") %} script.living_room_ac_heat_medium_script
+          {% elif (selected_fan.lower() == "high") %} script.living_room_ac_heat_high_script
+          {% elif (selected_fan.lower() == "auto") %} script.living_room_ac_heat_auto_script
+          {% endif %}
+        {% endif %}
+      data_template:
+        selected_temp: '{{ selected_temp }}'
+```
+#### Automations
+Now that you have all of your controls set up and all of you scripts waiting to be called, build a couple of automations to call the scripts based on the controls entities states.</br>
 
 ## Alexa Stuff
