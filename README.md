@@ -38,7 +38,9 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
   - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
     - [Configuring Node JS](#configuring-node-js)
   - [Configuring the skill](#configuring-the-skill)
-  - [Configuring the skill interface](#configuring-the-skill-interface)
+  - [Configuring the skill interface: Part 1](#configuring-the-skill-interface-part-1)
+  - [Configuring the lambda function](#configuring-the-lambda-function)
+  - [Configuring the skill interface: Part 2](#configuring-the-skill-interface-part-1)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -527,7 +529,7 @@ To check you installation, Open Command Prompt (cmd) from the start menu and typ
 - Download this repository as a zip file and extract to a temporary folder on your windows computer.
 - Locate the extracted files and open the *conf* folder, inside you will find two *json* files: *endpoints_config* for conifguring your endpoint and *hass_api_config* for configuring you Home Assistant API access. Open both files in any text editor and modify the following values inside the quotation marks in a similiar manner to the existing example:</br>
 
-In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array:</br>
+In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array as in the downloaded example. If you have only one unit, remove the one of the JSON object from the JSON array, don't forget to remove the comma aswell:</br>
 ``` json
 [{
 	"endpoint_unique_id": "A unique endpoint id for backend use between alexa and the skill",
@@ -555,10 +557,25 @@ In hass_api_config.json, configure your Home Assistant API:</br>
   - conf
   - node_modules
   - lambda.js
-### Configuring the skill interface
+### Configuring the skill interface: Part 1
 In [Amazon Developer Portal](https://developer.amazon.com/), sign in, click the *DEVELOPER CONSOLE*, the *ALEXA* tab and under *Alexa Skills Kit* click *Get Started*.</br>
-In skill management window, click *Add a New Skill* and configure you skill accoaring to the following with one rule, if I didn't mentioned a setting, leave it with its default value:</br>
-#### Skill Information
+In skill management window, click *Add a New Skill* and configure you skill accoaring to the following with one rule, if I didn't mentioned a setting, leave it with its default value, when you're done with this part, don't close the tab, you going to come back here later.</br>
+In the Skill Information Tab, set the following and save:
 - Skill Type: Smart Home Skill API
 - Name: What ever you want, just keep in mind you will need to identify this skill later.
+### Configuring the lambda function
+In [Amazon Web Services Portal](https://aws.amazon.com/), sign in, in the "AWS services" module search and locate *Lambda*, click it and then click *Create Function*:
+- Select *Author from scratch*
+- Name: Give it what ever name you want, just keep in mind that the name will help you idetify the function.
+- Choose an existing role, or create one from a template.
+- Your lambda function is created, in the *Function code* module, under *Code entry type* select *Upload a .Zip file*.
+- Browse and upload the zip file you've created in [*Configuring the skill* section](#configuring-the-skill).
+- Under *Handler info* type *lambda.handler*
+- Scroll down to the *Basic settings* module and select time out of 8 seconds.
+- Scroll back up to the *Configuration* module and from the left bar list click on *Alexa Smart Home*.
+- In the new added *Configure triggers* module, under *Application Id* paste the application id assigned to your skill in the [*Configuring the skill interface: Part 1* section](#configuring-the-skill-interface-part-1), it looks like this *amzn1.ask.skill.#unique-skill_identifier*.
+- Save your function and don't close this tab, you're going to need it again in the next step.
 
+
+### Configuring the skill interface: Part 2
+Go back to [Amazon Developer Portal](https://developer.amazon.com/), and click on the 
