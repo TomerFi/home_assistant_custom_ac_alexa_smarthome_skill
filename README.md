@@ -36,6 +36,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
       - [Run scripts when the controllers changes state](#run-scripts-when-the-controllers-change-state)
 - [Alexa Smart Home Skill](#alexa-smart-home-skill)
   - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
+    - [Configuring Node JS](#configuring-node-js)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -511,3 +512,12 @@ This section will guide you on building a Smart Home Skill that will bind the Ho
 Please note, a basic thermostat usually contains a temperature, mode and power settings. The fan setting doesn't exist. Therefore, you will not be able to control the fan level with alexa for now, but I'm working on a workaround for it. I will update this repository as soon as I'll have it working. </br>
 For now, controlling the power, mode and temperature settings natively with alexa is extremely convenient as you can see in my [YouTube video](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc).</br>
 ### Prerequisites for running the skill
+There are a couple of things you need before running this skill:</br>
+- Create an account in [Amazon Developer Portal](https://developer.amazon.com/), in here you will configure your skill.
+- Create and account [Amazon Web Services Portal](https://aws.amazon.com/), you're going to use Amazon's Lambda servers to host the skill.
+- The skill is written *JavaScript* (there is no need for any prior knowledge in JS) and packaged with *Node Package Manager*, you will need to download and configure *Node JS* on your computer in order to compile the package.
+
+#### Configuring Node JS
+Download and install [Node JS] (which includes npm)for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
+Locate the *Path* variable and add a new entry with the path of your Node JS installations, (for example - C:\Program Files\nodejs\).</br>
+To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed.</br>
