@@ -4,7 +4,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
 
 **Table Of Contents**
 - [Background](#background)
-- [Obtain the IR packets](#obtain-the-ir-packets)
+- [Obtaining the IR packets](#obtaining-the-ir-packets)
 - [Configuring Home Assistant](#configuring-home-assistant)
   - [Preparing the configuration](#preparing-the-configuration)
   - [Creating the entities](#creating-the-entities)
@@ -43,7 +43,7 @@ The first part was easy, I purchased a [*Broadlink RM Pro*](https://www.aliexpre
 These devices are actually a smarter universal remote that you can access remotely a create different scenarios for using your various ir/rf devices (only the pro version supports rf), I've been using them for more than a year now and they work great! </br>
 For this project I've used my broadlink devices as IR Transmitters. The ir codes management is handled by home assistant and activated with [Amazons' Alexa](https://www.amazon.com/Amazon-Echo-And-Alexa-Devices/b?ie=UTF8&node=9818047011).
 
-## Obtain the IR packets
+## Obtaining the IR packets
 The first thing you need to do is obtain the ir packets for your ac unit, it's important to remember in regards to the basic ac unites that has a remote with a screen showing all the ac data, the ir packets that will be sent to the unit will contain all the needed information in one packet. </br>
 For example, let's say that my remote displays mode:HEAT, fan:LOW and Temperature:26C, when I'll press the ON button, the remote will send a packet constructed from "HEAT+LOW+26".</br>
 Now, if I press the + button to increase the temperature after I've turned on the unit, the remote will send a packet constructed from "HEAT+LOW+27". </br>
