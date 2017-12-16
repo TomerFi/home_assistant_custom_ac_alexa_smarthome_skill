@@ -526,6 +526,7 @@ To check you installation, Open Command Prompt (cmd) from the start menu and typ
 ### Configuring the skill
 - Download this repository as a zip file and extract to a temporary folder on your windows computer.
 - Locate the extracted files and open the *conf* folder, inside you will find two *json* files: *endpoints_config* for conifguring your endpoint and *hass_api_config* for configuring you Home Assistant API access. Open both files in any text editor and modify the following values inside the quotation marks in a similiar manner to the existing example:</br>
+
 In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array:</br>
 ``` json
 [{
