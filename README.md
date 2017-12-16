@@ -133,5 +133,6 @@ living_room_ac:
     - input_select.lr_ac_mode
     - input_select.lr_ac_fan
 ```
-![ha-ac_mockup](ha-ac.jpg, "this is what the end result looks like in ha")
+This is what the end result looks like in Home Assistant:
+![ha-ac_mockup](ha-ac.jpg)
 ## Alexa Stuff
