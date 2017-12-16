@@ -1,7 +1,4 @@
-# I'M WORKING ON IT...
-
-
-# home_assistant_custom_ac_alexa_smarthome_skill
+# Alexa Smart Skill for controlling IR AC Units using Home Assistant and Broadlink
 Alexa smart home skill hosted on lambda servers for controlling a custom ir air conditioner build with [Home Assistant](https://home-assistant.io/) controls.</br>
 You can check out the skill in action [here](https://www.youtube.com/edit?o=U&video_id=Y4i989zwQlc) and check out the ac unit control panel in home assistant [here](ha-ac.jpg).
 
