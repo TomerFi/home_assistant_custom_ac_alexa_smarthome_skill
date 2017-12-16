@@ -585,7 +585,27 @@ Go into the created profile and click on the *Web Settings* tab, you need to all
 - *layla.amazon.com* is for outside of the US.
 - *alexa.amazon.co.jp* is for Japan.
 
-If you're not sure which one to use, you can use all three, it doesn't matter, only the right one will be used anyway.</br>
 Save the security profile, but don't close the tab, you will need it for the next step.
 ### Configuring the skill interface: Part 2
-Go back to [Amazon Developer Portal](https://developer.amazon.com/)(the original tab where we started creating our skill), and click on the 
+Go back to [Amazon Developer Portal](https://developer.amazon.com/)(the original tab where we started creating our skill), and click *Configuration* on the right menu and fill in the following:
+- Default: Paste the *arn* from the function you've created in the [*Configuring the lambda function* section](#configuring-the-lambda-function), it looks like this: *arn:aws:lambda:us-east-1:unique-function-identifier*.
+- Authorization URL: type *https://www.amazon.com/ap/oa/?redirect_url=* concatenated with the selected Redicrect url from the previus step.
+- Client Id: paste the *Client ID* from the secutiry profile you've created in the previous step.
+- Scope: type *profile*
+- Access Token URI: type *https://api.amazon.com/auth/o2/token*
+- Client Secret: paste the *Client Secret* from the secutiry progfile you've created in the previous step.
+- Client Authentication Scheme: select *Credentials in request body*.
+- Privacy Policy URL: type any valid url, you can type your ha url if you want, no one gonna have access to this page but you.
+
+Click save. After saving, if you look into the *Test* menu and make sure that *Start testing this skill* is marked yes.</br>
+Click on the *Privacy & Compliance* menu, select *No* in all of the radio buttons and mark the checkbox for *Export Compliance*. Type any url in the *Privacy Policy URL* and click save.</br>
+
+## Activating the skill
+Look in your alexa app, under *Your Skills* you should see your new skill, enable it while identifing with your amazon account.</br>
+Ask alexa to discover devices, it should discover your new *Smart Thermostat* and you can nativly control it with your speech, here are some examples:
+- Alexa, turn on the *endpoint name*
+- Alexa, set the temperature of the *endpoint name* to 28
+- Alexa, set the *endpoint name* to heat
+- Alexa, what is the temperature of the *endpoint name*
+
+Have Fun!
