@@ -177,7 +177,215 @@ living_room_rm_pro_send_packet:
 ```
 ##### Constructing the correct packet
 As I said before, my ac unit supports 2 mode, 4 fan levels and 17 possible degrees.</br>
-Create 8 script based on *mode+fan* each script contains thier designated 17 possible packets for the *mode+fan+chossen temperature* based on the value it recived with incoming parameter named *selected_temp*.</br>
-
+Create 8 scripts based on *mode+fan* each script contains thier designated 17 possible packets for the *mode+fan+chossen temperature*.</br>
+Based on the value the scripts recives with incoming parameter named *selected_temp*, the script will call the *send packets to broadlink script* setting the corrent ir code in the outgoing *packet_code* paramter. You need to copy your pre-obtained ir packets within the deisganted *if* statement in the correct script:</br>
+###### Mode: COOL + Fan: LOW
+```yaml
+living_room_ac_cool_low_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:COOL+fan:LOW+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:COOL+fan:LOW+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:COOL+fan:LOW+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:COOL+fan:LOW+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:COOL+fan:LOW+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:COOL+fan:LOW+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:COOL+fan:LOW+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:COOL+fan:LOW+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:COOL+fan:LOW+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:COOL+fan:LOW+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:COOL+fan:LOW+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:COOL+fan:LOW+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:COOL+fan:LOW+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:COOL+fan:LOW+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:COOL+fan:LOW+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:COOL+fan:LOW+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:LOW+temperature:32"
+          {% endif %}
+```
+###### Mode: COOL + Fan: MED
+```yaml
+living_room_ac_cool_med_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:COOL+fan:MED+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:COOL+fan:MED+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:COOL+fan:MED+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:COOL+fan:MED+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:COOL+fan:MED+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:COOL+fan:MED+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:COOL+fan:MED+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:COOL+fan:MED+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:COOL+fan:MED+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:COOL+fan:MED+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:COOL+fan:MED+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:COOL+fan:MED+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:COOL+fan:MED+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:COOL+fan:MED+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:COOL+fan:MED+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:COOL+fan:MED+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:MED+temperature:32"
+          {% endif %}
+```
+###### Mode: COOL + Fan: HIGH
+```yaml
+living_room_ac_cool_high_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:HIGH+temperature:32"
+          {% endif %}
+```
+###### Mode: COOL + Fan: AUTO
+```yaml
+living_room_ac_cool_auto_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:COOL+fan:AUTO+temperature:32"
+          {% endif %}
+```
+###### Mode: HEAT + Fan: LOW
+```yaml
+living_room_ac_heat_low_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:LOW+temperature:32"
+          {% endif %}
+```
+###### Mode: HEAT + Fan: MED
+```yaml
+living_room_ac_heat_med_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:HEAT+fan:MED+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:HEAT+fan:MED+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:HEAT+fan:MED+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:HEAT+fan:MED+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:HEAT+fan:MED+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:HEAT+fan:MED+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:HEAT+fan:MED+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:HEAT+fan:MED+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:HEAT+fan:MED+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:HEAT+fan:MED+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:HEAT+fan:MED+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:HEAT+fan:MED+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:HEAT+fan:MED+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:HEAT+fan:MED+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:HEAT+fan:MED+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:HEAT+fan:MED+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:MED+temperature:32"
+          {% endif %}
+```
+###### Mode: HEAT + Fan: HIGH
+```yaml
+living_room_ac_heat_high_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:HIGH+temperature:32"
+          {% endif %}
+```
+###### Mode: HEAT + Fan: AUTO
+```yaml
+living_room_ac_heat_auto_script:
+  sequence:
+    - service: script.living_room_rm_pro_send_packet
+      data_template:
+        packet_code: >
+          {% if (selected_temp == "16") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:16"
+          {% elif (selected_temp == "17") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:17"
+          {% elif (selected_temp == "18") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:18"
+          {% elif (selected_temp == "19") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:19"
+          {% elif (selected_temp == "20") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:20"
+          {% elif (selected_temp == "21") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:21"
+          {% elif (selected_temp == "22") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:22"
+          {% elif (selected_temp == "23") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:23"
+          {% elif (selected_temp == "24") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:24"
+          {% elif (selected_temp == "25") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:25"
+          {% elif (selected_temp == "26") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:26"
+          {% elif (selected_temp == "27") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:27"
+          {% elif (selected_temp == "28") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:28"
+          {% elif (selected_temp == "29") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:29"
+          {% elif (selected_temp == "30") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:30"
+          {% elif (selected_temp == "31") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:31"
+          {% elif (selected_temp == "32") %} "place ir packet here for mode:HEAT+fan:AUTO+temperature:32"
+          {% endif %}
+```
 
 ## Alexa Stuff
