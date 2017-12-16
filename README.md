@@ -9,12 +9,12 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
 The first part was easy, I purchased a [*Broadlink RM Pro*](https://www.aliexpress.com/item/Broadlink-RM2-RM-Pro-Smart-home-Automation-Universal-Intelligent-wireless-remote-control-WIFI-IR-RF-switch/32738344424.html?spm=a2g0s.9042311.0.0.svn7ka) for my living room's ac unit, and a [*Broadlink RM Mini*](https://www.aliexpress.com/item/Broadlink-RM2-RM-PRO-Smart-Home-Automation-WiFi-IR-RF-Universal-Intelligent-Wireless-remote-Controller-for/32729931353.html?spm=a2g0s.9042311.0.0.svn7ka) for my bedroom's ac unit.</br>
-These devices are actually a smarter universal remote that you can access remotely a create different scenarios for using your various ir/rf devices (only the pro version supports rf), I've been using them for more than a year now and they work great!</br>
+These devices are actually a smarter universal remote that you can access remotely a create different scenarios for using your various ir/rf devices (only the pro version supports rf), I've been using them for more than a year now and they work great! </br>
 For this project I've used my broadlink devices as IR Transmitters. The ir codes management is handled by home assistant and activated with [Amazons' Alexa](https://www.amazon.com/Amazon-Echo-And-Alexa-Devices/b?ie=UTF8&node=9818047011).
 
 ## Obtain the IR packets
-The first thing you need to do is obtain the ir packets for you ac unit, it's important to remember in regards to the basic ac unites that has a remote with a screen showing all the ac data, the ir packets that will be sent to the unit will contain all the needed information in one packet. </br>
-For example, let's say that my remote displays mode:HEAT, fan:LOW low and Temperature:26C, when I'll press the ON button, the remote will send a packet constructed from "HEAT+LOW+26".</br>
+The first thing you need to do is obtain the ir packets for your ac unit, it's important to remember in regards to the basic ac unites that has a remote with a screen showing all the ac data, the ir packets that will be sent to the unit will contain all the needed information in one packet. </br>
+For example, let's say that my remote displays mode:HEAT, fan:LOW and Temperature:26C, when I'll press the ON button, the remote will send a packet constructed from "HEAT+LOW+26".</br>
 Now, if I press the + button to increase the temperature after I've turned on the unit, the remote will send a packet constructed from "HEAT+LOW+27". </br>
 If I then change the mode to COOL, assuming my remote remembers my unit is on, it will send a packet constructed from "COOL+LOW+27". </br>
 If I press the OFF button on my remote, it will just send "OFF" to the unit, and if my remote remembers that the unit if off, any change I'll make to the temperature, mode, fan or any other setting, will not be sent to the unit, it will only be displayed and saved in the remote waiting for when I'll press the ON button. </br>
@@ -24,7 +24,7 @@ My living room's ac unit (which is the one I'll be using in this example) has th
 - Select FAN: LOW/MED/HIGH/AUTO
 - Select temperature: 17-32 Celsius.
 
-Which means: 2 modes X 4 fan levels X 17 possible temperatures + 1 off command = **137 packets** I needed to obtatin in order to be able to control my ac unit properly. </br>
+Which means: 2 modes X 4 fan levels X 17 possible temperatures + 1 off command = **137 packets** I needed to obtain in order to be able to control my ac unit properly. </br>
 
 There are a couple of ways you can obtain your packets, </br>
 - You can teach the packets to your broadlink which is pretty easy, after your done you can extract the code packets from the broadlink settings using NightRang3r's [scripts](https://github.com/NightRang3r/Broadlink-e-control-db-dump), it's pretty straight forward. Please note the script is designed for use with python 2.7, so if you are using python 3 and above, you're going to need to make some adjustments to the script. Also, please note you're going to need an android device to extract the settings files from.
@@ -33,9 +33,9 @@ In my case, I had all the packets already in my broadlink app, so it didn't make
 
 Once you have all your packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
-## Configuring Home Assistat
+## Configuring Home Assistant
 ### Prepare the configuration
-I like to keep my entities orginaized, I'm using diffrent yaml files for each platform. Therefor when I reference a unknown yaml file, it actually means I have it included in my configuration:</br>
+I like to keep my entities organized, I'm using different yaml files for each platform. Therefor when I reference a unknown yaml file, it actually means I have it included in my configuration:</br>
 ```yaml
 # configuration.yaml
 
@@ -52,7 +52,7 @@ automation: !include automations.yaml
 script: !include scripts.yam
 ```
 ### Create the entities
-The basic ac unit has four controllers: fan, mode, temperature and power control. You need to create an entity for each one of these contollers:</br>
+The basic ac unit has four controllers: fan, mode, temperature and power control. You need to create an entity for each one of these controllers:</br>
 #### Fan control
 The first controller we'll create is the Fan controller, which is going to be *input_select* entity:</br>
 ```yaml
@@ -91,9 +91,9 @@ lr_ac_status:
   initial: off
 ```
 #### Disguising the temperature
-Actually, these four controllers is all you need to control your ac unit, but controlling the temperature with an *input_text* entity is not very comftirable, so hide it with two more entities:</br>
+Actually, these four controllers is all you need to control your ac unit, but controlling the temperature with an *input_text* entity is not very comfortable, so hide it with two more entities:</br>
 ##### Template sensor
-Used a sensor with the tempalate platform to dispaly the current value of the input_text as a sensor and not as an editable entity:
+Used a sensor with the template platform to display the current value of the input_text as a sensor and not as an editable entity:
 ```yaml
 # sensors.yaml
 - platform: template
@@ -102,7 +102,7 @@ Used a sensor with the tempalate platform to dispaly the current value of the in
       value_template: "{{ states.input_text.lr_ac_temp_text.state }}"
 ```
 ##### Template cover
-After disguising the *input_text* with a *sensor*, you can't actually edit the "sensor" value, so add a cover with the template platform to not only control the value of the temperature, but also to limit the range of the allowed temperatures with you ac unit, my unit supports 16-32 celsius degrees, you can change these values for what ever is supported in your unit:</br> 
+After disguising the *input_text* with a *sensor*, you can't actually edit the "sensor" value, so add a cover with the template platform to not only control the value of the temperature, but also to limit the range of the allowed temperatures with you ac unit, my unit supports 16-32 Celsius degrees, you can change these values for what ever is supported in your unit:</br> 
 ```yaml
 # covers.yaml
 - platform: template
@@ -159,14 +159,14 @@ This is what the end result looks like in Home Assistant:</br>
 ![ha-ac_mockup](ha-ac.jpg)
 
 ### Incorporate the IR packets
-After creating the ac control panel, the entities aren't actually doing anything, in order to make them control the ac unit, you're going to have to wrap them up with scripts and automations.</br>
+After creating the ac control panel, the entities aren't actually doing anything, in order to make them control the ac unit, you're going to have to wrap them up with scripts and automations. </br>
 #### Scripts
-In order to make things as generic as possible to allow a quick add of more ac units, I've splited the script into multiple scripts, which will make a "chain of scripts" controlling the ac unit.</br>
-To make this chain of scripts as clear as I can, I'll start at the final script and work my way up the chain.</br>
+In order to make things as generic as possible to allow a quick add of more ac units, I've split the script into multiple scripts, which will make a "chain of scripts" controlling the ac unit.</br>
+To make this chain of scripts as clear as I can, I'll start at the final script and work my way up the chain. </br>
 All the scripts resign inside the *scripts.yaml* file.
 ##### Send ir packets to broadlink script
-The final script is prety simple, it recieves an incoming paramter called *packet_code* containing an ir packets, and register it with the designated service of your broadlink device.</br>
-Please note that service name cotnains the ip address of your broadlink device, get yours from the *services tool* in home assistant:</br>
+The final script is pretty simple, it receives an incoming parameter called *packet_code* containing an ir packet, and register it with the designated service of your broadlink device.</br>
+Please note that service name contains the ip address of your broadlink device, get yours from the *services tool* in home assistant:</br>
 ```yaml
 living_room_rm_pro_send_packet:
   sequence:
@@ -176,9 +176,9 @@ living_room_rm_pro_send_packet:
           - '{{ packet_code }}'
 ```
 ##### Scripts for constructing the ir packet
-As I said before, my ac unit supports 2 mode, 4 fan levels and 17 possible degrees.</br>
-Create 8 scripts based on *mode+fan* each script contains thier designated 17 possible packets for the *mode+fan+chossen temperature*.</br>
-Based on the value the scripts recives with incoming parameter named *selected_temp*, the script will call the *send packets to broadlink script* setting the corrent ir code in the outgoing *packet_code* paramter. You need to copy your pre-obtained ir packets within the deisganted *if* statement in the correct script:</br>
+As I said before, my ac unit supports 2 modes, 4 fan levels and 17 possible degrees.</br>
+Create 8 scripts based on *mode+fan* each script contains their own 17 possible packets for the *mode+fan+chossen temperature*.</br>
+Based on the value the scripts receive with the incoming parameter named *selected_temp*, the script will call the former script setting the correct ir code in the outgoing *packet_code* parameter. You need to copy your pre-obtained ir packets within the designated *if* statement in the correct script:</br>
 ###### Mode: COOL + Fan: LOW
 ```yaml
 living_room_ac_cool_low_script:
@@ -388,7 +388,7 @@ living_room_ac_heat_auto_script:
           {% endif %}
 ```
 ##### Choose the correct ir packet constructor script
-Create a script that calls the correct ir packet constructing script. The script recieves three incoming parameters: *selected_mode* and *selected_fan* will be used to determain the correct script to run, the *selected_temp* parameter will be passed throu to to the called script:</br>
+Create a script that calls of the 8 scripts above. The script receives three incoming parameters: *selected_mode* and *selected_fan* will be used to determine the correct script to run, the *selected_temp* parameter will be passed throu to to the called script:</br>
 ```yaml
 living_room_ac_check_state_script:
   sequence:
@@ -410,6 +410,63 @@ living_room_ac_check_state_script:
         selected_temp: '{{ selected_temp }}'
 ```
 #### Automations
-Now that you have all of your controls set up and all of you scripts waiting to be called, build a couple of automations to call the scripts based on the controls entities states.</br>
+Now that you have all of your controls set up and all of you scripts waiting to be called, build a couple of automations to call the scripts based on the controls entity states.</br>
+All the automations resign inside the *automations.yaml* file.</br>
+##### Run scripts for power on
+The following automation executes whenever the state for our *input_boolean* entity, which is the power controller for the ac unit, changes to "ON". The automation calls the script for choosing the ir packet constructor script, setting the states of the mode, fan and temperature entities as outgoing parameters:</br>
+```yaml
+- id: lr_ac_status_on
+  alias: lr_ac_status_on
+  trigger:
+    platform: state
+    entity_id: input_boolean.lr_ac_status
+    to: 'on'
+  action:
+    service: script.living_room_ac_check_state_script
+    data_template:
+      selecte_state: '{{ states.input_select.lr_ac_mode.state }}'
+      selected_fan: '{{ states.input_select.lr_ac_fan.state }}'
+      selected_temp: '{{ states.sensor.lr_ac_temp_sensor.state }}'
+```
+##### Run scripts for power off
+The following automation executes whenever the state of the *input_boolean* entity, which is the power controller for the ac unit, changes to "ON". The automation calls the script for sending ir packets to the broadlink device setting the ir packet obtained for off as an outgoing parameter:</br>
+```yaml
+- id: lr_ac_status_off
+  alias: lr_ac_status_off
+  trigger:
+    platform: state
+    entity_id: input_boolean.lr_ac_status
+    to: 'off'
+  action:
+    service: script.living_room_rm_pro_send_packet
+    data:
+      packet_code:
+        - "Place the ir packet for OFF here"
+```
+##### Run scripts when the controllers change state
+The following script runs whenever one of the controllers for mode (input_select), fan (input_select) or temperature (sensor) changes their states as long as the power (input_boolean) is on. The automation calls the script for choosing the ir packet constructor script, setting the states of the mode, fan and temperature entities as outgoing parameters:</br>
+```yaml
+- id: lr_ac_changes
+  alias: lr_ac_changes
+  trigger:
+    - platform: state
+      entity_id: sensor.lr_ac_temp_sensor
+    - platform: state
+      entity_id: input_select.lr_ac_mode
+    - platform: state
+      entity_id: input_select.lr_ac_fan
+  action:
+    - condition: state
+      entity_id: input_boolean.lr_ac_status
+      state: 'on'
+    - service: script.living_room_ac_check_state_script
+      data_template:
+        selecte_state: '{{ states.input_select.lr_ac_mode.state }}'
+        selected_fan: '{{ states.input_select.lr_ac_fan.state }}'
+        selected_temp: '{{ states.sensor.lr_ac_temp_sensor.state }}'
+```
+Restart you home assistant for the changes to take effect, you can run a configuration check before restarting to look for any syntax errors. </br>
+That's it. You can now control your ac unit with Home Assistant and broadlink devices. </br>
 
-## Alexa Stuff
+Now, jump over to the Alexa section which covers "binding" the controller entities in Home Assistant to a Smart Thermostat for Alexa.
+## Alexa Smart Thermostat
