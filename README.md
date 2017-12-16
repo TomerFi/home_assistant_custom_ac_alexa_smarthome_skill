@@ -33,7 +33,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
     - [Automations](#automations)
       - [Run scripts for power on](#run-scripts-for-power-on)
       - [Run scripts for power off](#run-scripts-for-power-off)
-      - [Run scripts when the controllers change state](#run-scripts-when-the-controllers-change-state)
+      - [Run scripts when the controllers changes state](#run-scripts-when-the-controllers-change-state)
 - [Alexa Smart Thermostat](#alexa-smart-thermostat)
   - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
 
@@ -474,7 +474,7 @@ The following automation executes whenever the state of the *input_boolean* enti
       packet_code:
         - "Place the ir packet for OFF here"
 ```
-##### Run scripts when the controllers change state
+##### Run scripts when the controllers changes state
 The following script runs whenever one of the controllers for mode (input_select), fan (input_select) or temperature (sensor) changes their states as long as the power (input_boolean) is on. The automation calls the script for choosing the ir packet constructor script, setting the states of the mode, fan and temperature entities as outgoing parameters:</br>
 ```yaml
 - id: lr_ac_changes
