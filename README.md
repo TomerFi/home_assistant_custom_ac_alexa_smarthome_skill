@@ -42,6 +42,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
   - [Configuring the lambda function](#configuring-the-lambda-function)
   - [Creating the security profile](#creating-the-security-profile)
   - [Configuring the skill interface: Part 2](#configuring-the-skill-interface-part-1)
+  - [Activating the skill](#activating-the-skill)
 
 ## Background
 So... I have a couple of IR controlled air-conditioner units that I wanted to make smarter. </br>
@@ -507,7 +508,7 @@ That's it. You can now control your ac unit with Home Assistant and broadlink de
 
 Now, jump over to the Alexa section which covers "binding" the controller entities in Home Assistant to a Smart Thermostat for Alexa.
 ## Alexa Smart Home Skill
-Alexa Smart Home Skill allows us to configure smart home devices for natively controlling with alexa, such a deivce, from alexa's point of view is called an *endpoint*.</br>
+Alexa Smart Home Skill allows us to configure smart home devices for natively controlling with alexa, such a device, from alexa's point of view is called an *endpoint*.</br>
 This section will guide you on building a Smart Home Skill that will bind the Home Assistant entities as an endpoint of type Smart Thermostat, allowing you to control the ac unit natively:</br>
 - Alexa, turn on the *endpoint name*
 - Alexa, set the temperature of the *endpoint name* to 28
@@ -523,14 +524,14 @@ There are a couple of things you need before running this skill:</br>
 - The skill is written *JavaScript* (there is no need for any prior knowledge in JS) and packaged with *Node Package Manager*, you will need to download and configure *Node JS* on your computer in order to compile the package.
 
 #### Configuring Node JS
-Download and install [Node JS](which includes npm) for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
+Download and install [Node JS](which includes npm) for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Environment Variables...* button at the bottom.</br>
 Locate the *Path* variable and add a new entry with the path of your Node JS installations, (for example - C:\Program Files\nodejs\).</br>
-To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed.</br>
+To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed. </br>
 ### Configuring the skill
 - Download this repository as a zip file and extract to a temporary folder on your windows computer.
-- Locate the extracted files and open the *conf* folder, inside you will find two *json* files: *endpoints_config* for conifguring your endpoint and *hass_api_config* for configuring you Home Assistant API access. Open both files in any text editor and modify the following values inside the quotation marks in a similiar manner to the existing example:</br>
+- Locate the extracted files and open the *conf* folder, inside you will find two *json* files: *endpoints_config* for configuring your endpoint and *hass_api_config* for configuring you Home Assistant API access. Open both files in any text editor and modify the following values inside the quotation marks in a similar manner to the existing example:</br>
 
-In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array as in the downloaded example. If you have only one unit, remove the one of the JSON object from the JSON array, don't forget to remove the comma aswell:</br>
+In endpoints_config.json, configure your ac unit, you can add additional unit as JSON objects inside the JSON array as in the downloaded example. If you have only one unit, remove the one of the JSON object from the JSON array, don't forget to remove the comma as well:</br>
 ``` json
 [{
 	"endpoint_unique_id": "A unique endpoint id for backend use between alexa and the skill",
@@ -548,26 +549,26 @@ In hass_api_config.json, configure your Home Assistant API:</br>
 ```json
 {
 	"api_url": "Your ha address (please use a fixed dns name and not an interchangeable address) for example https://my-ha.duckdns.org",
-	"api_port": "The port accisble to your ha - no quotation marks required for example 443",
+	"api_port": "The port accessible to your ha - no quotation marks required for example 443",
 	"api_password": "Your ha api_password"
 }
 ```
-- Open Command Prompt with administrative privlieges and navigate into the folder you have extracted this reposiotory to (the path where you can find the *package.json* file.
-- Type *npm install*, npm will download the moudles required by our skill into a new folder called *node_modules*.
-- Zip the entire **content** (not the folder itself) of the folder you have extracted this reposioty to (we'll use the zip file later). The zip file should contain the following:
+- Open Command Prompt with administrative privileges and navigate into the folder you have extracted this repository to (the path where you can find the *package.json* file.
+- Type *npm install*, npm will download the modules required by our skill into a new folder called *node_modules*.
+- Zip the entire **content** (not the folder itself) of the folder you have extracted this repository to (we'll use the zip file later). The zip file should contain the following:
   - conf
   - node_modules
   - lambda.js
 ### Configuring the skill interface: Part 1
 In [Amazon Developer Portal](https://developer.amazon.com/), sign in, click the *DEVELOPER CONSOLE*, the *ALEXA* tab and under *Alexa Skills Kit* click *Get Started*.</br>
-In skill management window, click *Add a New Skill* and configure you skill accoaring to the following with one rule, if I didn't mentioned a setting, leave it with its default value, when you're done with this part, don't close the tab, you going to come back here later.</br>
+In skill management window, click *Add a New Skill* and configure your skill according to the following with one rule, if I didn't mention a setting, leave it with its default value, when you're done with this part, don't close the tab, you going to come back here later. </br>
 In the Skill Information Tab, set the following and save:
 - Skill Type: Smart Home Skill API
-- Name: What ever you want, just keep in mind you will need to identify this skill later.
+- Name: Whatever you want, just keep in mind you will need to identify this skill later.
 ### Configuring the lambda function
 In [Amazon Web Services Portal](https://aws.amazon.com/), sign in, in the "AWS services" module search and locate *Lambda*, click it and then click *Create Function*:
 - Select *Author from scratch*
-- Name: Give it what ever name you want, just keep in mind that the name will help you idetify the function.
+- Name: Give it whatever name you want, just keep in mind that the name will help you idetify the function.
 - Choose an existing role, or create one from a template.
 - Your lambda function is created, in the *Function code* module, under *Code entry type* select *Upload a .Zip file*.
 - Browse and upload the zip file you've created in [*Configuring the skill* section](#configuring-the-skill).
@@ -577,11 +578,11 @@ In [Amazon Web Services Portal](https://aws.amazon.com/), sign in, in the "AWS s
 - In the new added *Configure triggers* module, under *Application Id* paste the application id assigned to your skill in the [*Configuring the skill interface: Part 1* section](#configuring-the-skill-interface-part-1), it looks like this *amzn1.ask.skill.#unique-skill_identifier*. Please note that trigger is enabled.
 - Save your function and don't close this tab, you're going to need it later.
 ### Creating the security profile
-For Smart Home Skills, Amazon forces us to use *lambda* as host for the skill, which we did in previous steps, and *OAUTH 2 Authorization Framework* for identifing the users. Fourtnlly for us, Amazon also has a service called *Login with Amazon* which allows to create secutiry profile for supporting OAUTH 2. Thant means we can allow our users to login with thier amazon account instead of creating our own authrization infrastructure and manage our own users. This is espcially great for this project. Considering this skill is for personal use only and not meant to be pulished, using Amazon's security profile will save the trouble of authenticating ourselfs.</br>
+For Smart Home Skills, Amazon forces us to use *lambda* as host for the skill, which we did in previous steps, and *OAUTH 2 Authorization Framework* for identifying the users. Fortunately for us, Amazon also has a service called *Login with Amazon* which allows to create security profile for supporting OAUTH 2. Thant means we can allow our users to login with their amazon account instead of creating our own authorization infrastructure and manage our own users. This is especially great for this project. Considering this skill is for personal use only and not meant to be published, using Amazon's security profile will save the trouble of authenticating ourselves.</br>
 Open [Amazon Developer Portal](https://developer.amazon.com/) in a different tab (leave the current developer portal tab open, you will need it), sign in and this time click on the *APPS & SERVICES* tab and then click *Login with Amazon* sub-menu.</br>
-Click *Create a New Security Profile* and give the profile a name and a description. In the *Privacy URL* just put any url you want, you can put you ha link if you want, no one besides you is going to have access to this page. Click save to save your profile.</br>
-Go into the created profile and click on the *Web Settings* tab, you need to allow a return url, go back to original developer portal tab and click *Configuration* in the right menu. Scroll down until you see *Redirect URLs*.</br>
-- *pitangui.amazon.com* is the url for inside the US.
+Click *Create a New Security Profile* and give the profile a name and a description. In the *Privacy URL* just put any URL you want, you can put your ha link if you want, no one besides you is going to have access to this page. Click save to save your profile. </br>
+Go into the created profile and click on the *Web Settings* tab, you need to allow a return URL, go back to original developer portal tab and click *Configuration* in the right menu. Scroll down until you see *Redirect URLs*. </br>
+- *pitangui.amazon.com* is the URL for inside the US.
 - *layla.amazon.com* is for outside of the US.
 - *alexa.amazon.co.jp* is for Japan.
 
@@ -589,20 +590,19 @@ Save the security profile, but don't close the tab, you will need it for the nex
 ### Configuring the skill interface: Part 2
 Go back to [Amazon Developer Portal](https://developer.amazon.com/)(the original tab where we started creating our skill), and click *Configuration* on the right menu and fill in the following:
 - Default: Paste the *arn* from the function you've created in the [*Configuring the lambda function* section](#configuring-the-lambda-function), it looks like this: *arn:aws:lambda:us-east-1:unique-function-identifier*.
-- Authorization URL: type *https://www.amazon.com/ap/oa/?redirect_url=* concatenated with the selected Redicrect url from the previus step.
-- Client Id: paste the *Client ID* from the secutiry profile you've created in the previous step.
+- Authorization URL: type *https://www.amazon.com/ap/oa/?redirect_url=* concatenated with the selected Redirect URL from the previous step.
+- Client Id: paste the *Client ID* from the security profile you've created in the previous step.
 - Scope: type *profile*
 - Access Token URI: type *https://api.amazon.com/auth/o2/token*
-- Client Secret: paste the *Client Secret* from the secutiry progfile you've created in the previous step.
+- Client Secret: paste the *Client Secret* from the security profile you've created in the previous step.
 - Client Authentication Scheme: select *Credentials in request body*.
-- Privacy Policy URL: type any valid url, you can type your ha url if you want, no one gonna have access to this page but you.
+- Privacy Policy URL: type any valid URL, you can type your ha URL if you want, no one going to have access to this page but you.
 
 Click save. After saving, if you look into the *Test* menu and make sure that *Start testing this skill* is marked yes.</br>
-Click on the *Privacy & Compliance* menu, select *No* in all of the radio buttons and mark the checkbox for *Export Compliance*. Type any url in the *Privacy Policy URL* and click save.</br>
-
-## Activating the skill
-Look in your alexa app, under *Your Skills* you should see your new skill, enable it while identifing with your amazon account.</br>
-Ask alexa to discover devices, it should discover your new *Smart Thermostat* and you can nativly control it with your speech, here are some examples:
+Click on the *Privacy & Compliance* menu, select *No* in all of the radio buttons and mark the checkbox for *Export Compliance*. Type any URL in the *Privacy Policy URL* and click save.</br>
+### Activating the skill
+Look in your alexa app, under *Your Skills* you should see your new skill, enable it while identifying with your amazon account.</br>
+Ask alexa to discover devices, it should discover your new *Smart Thermostat* and you can natively control it with your speech, here are some examples:
 - Alexa, turn on the *endpoint name*
 - Alexa, set the temperature of the *endpoint name* to 28
 - Alexa, set the *endpoint name* to heat
