@@ -34,7 +34,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
       - [Run scripts for power on](#run-scripts-for-power-on)
       - [Run scripts for power off](#run-scripts-for-power-off)
       - [Run scripts when the controllers changes state](#run-scripts-when-the-controllers-change-state)
-- [Alexa Smart Thermostat](#alexa-smart-thermostat)
+- [Alexa Smart Home Skill](#alexa-smart-home-skill)
   - [Prerequisites for running the skill](#prerequisites-for-running-the-skill)
 
 ## Background
@@ -500,7 +500,7 @@ Restart you home assistant for the changes to take effect, you can run a configu
 That's it. You can now control your ac unit with Home Assistant and broadlink devices. </br>
 
 Now, jump over to the Alexa section which covers "binding" the controller entities in Home Assistant to a Smart Thermostat for Alexa.
-## Alexa Smart Thermostat
+## Alexa Smart Home Skill
 Alexa Smart Home Skill allows us to configure smart home devices for natively controlling with alexa, such a deivce, from alexa's point of view is called an *endpoint*.</br>
 This section will guide you on building a Smart Home Skill that will bind the Home Assistant entities as an endpoint of type Smart Thermostat, allowing you to control the ac unit natively:</br>
 - Alexa, turn on the *endpoint name*
