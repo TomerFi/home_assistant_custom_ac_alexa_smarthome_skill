@@ -10,7 +10,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
 - [Obtain the IR packets](#obtain-the-ir-packets)
 - [Configuring Home Assistant](#configuring-home-assistant)
   - [Preparing the configuration](#preparing-the-configuration)
-  - [Creating the entities](#create-the-entities)
+  - [Creating the entities](#creating-the-entities)
     - [Fan control](#fan-control)
     - [Mode control](#mode-control)
     - [Temperature control](#temperature-control)
