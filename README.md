@@ -24,7 +24,7 @@ My living room's ac unit (which is the one I'll be using in this example) has th
 - Select FAN: LOW/MED/HIGH/AUTO
 - Select temperature: 17-32 Celsius.
 
-Which means: 2 modes X 4 fan levels X 16 possible temperatures + 1 off command = 129 packets I needed to obtatin in order to be able to control my ac unit properly. </br>
+Which means: 2 modes X 4 fan levels X 17 possible temperatures + 1 off command = **137 packets** I needed to obtatin in order to be able to control my ac unit properly. </br>
 
 There are a couple of ways you can obtain your packets, </br>
 - You can teach the packets to your broadlink which is pretty easy, after your done you can extract the code packets from the broadlink settings using NightRang3r's [scripts](https://github.com/NightRang3r/Broadlink-e-control-db-dump), it's pretty straight forward. Please note the script is designed for use with python 2.7, so if you are using python 3 and above, you're going to need to make some adjustments to the script. Also, please note you're going to need an android device to extract the settings files from.
@@ -34,7 +34,7 @@ In my case, I had all the packets already in my broadlink app, so it didn't make
 Once you have all your packets ready, you can jump to the fun stuff... configuring home assistant. :-)
 
 ## Configuring Home Assistat
-### Prepare our configuration
+### Prepare the configuration
 I like to keep my entities orginaized, I'm using diffrent yaml files for each platform. Therefor when I reference a unknown yaml file, it actually means I have it included in my configuration:</br>
 ```yaml
 # configuration.yaml
@@ -175,5 +175,9 @@ living_room_rm_pro_send_packet:
         packet:
           - '{{ packet_code }}'
 ```
+##### Constructing the correct packet
+As I said before, my ac unit supports 2 mode, 4 fan levels and 17 possible degrees.</br>
+Create 8 script based on *mode+fan* each script contains thier designated 17 possible packets for the *mode+fan+chossen temperature* based on the value it recived with incoming parameter named *selected_temp*.</br>
+
 
 ## Alexa Stuff
