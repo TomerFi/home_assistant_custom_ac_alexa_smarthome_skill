@@ -520,7 +520,7 @@ There are a couple of things you need before running this skill:</br>
 - The skill is written *JavaScript* (there is no need for any prior knowledge in JS) and packaged with *Node Package Manager*, you will need to download and configure *Node JS* on your computer in order to compile the package.
 
 #### Configuring Node JS
-Download and install [Node JS] (which includes npm) for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
+Download and install [Node JS](which includes npm) for windows from [here](https://nodejs.org/en/download/), after installing, open the start menu and search for *Edit the system environment variables*, open it and click the *Enviornment Variables...* button at the bottom.</br>
 Locate the *Path* variable and add a new entry with the path of your Node JS installations, (for example - C:\Program Files\nodejs\).</br>
 To check you installation, Open Command Prompt (cmd) from the start menu and type *npm -where* your npm version and path will be displayed.</br>
 ### Configuring the skill
@@ -534,8 +534,8 @@ In endpoints_config.json, configure your ac unit, you can add additional unit as
 	"status_input_boolean": "The full entity id for Power Control input_boolean",
 	"degrees_control": {
 		"degrees_input_text": "The full entity id for the Temperature Control input_text",
-		"min_degree": the minimum temperature accepted by your ac unit - no quotation marks required,
-		"max_degree": the maximum temperature accepted by your ac unit - no quotation marks required
+		"min_degree": "the minimum temperature accepted by your ac unit - no quotation marks required",
+		"max_degree": "the maximum temperature accepted by your ac unit - no quotation marks required"
 	},
 	"mode_input_select": "The full entity id for the Mode Control input_select"
 }]
@@ -544,7 +544,7 @@ In hass_api_config.json, configure your Home Assistant API:</br>
 ```json
 {
 	"api_url": "Your ha address (please use a fixed dns name and not an interchangeable address) for example https://my-ha.duckdns.org",
-	"api_port": The port accisble to your ha - no quotation marks required for example 443,
+	"api_port": "The port accisble to your ha - no quotation marks required for example 443",
 	"api_password": "Your ha api_password"
 }
 ```
