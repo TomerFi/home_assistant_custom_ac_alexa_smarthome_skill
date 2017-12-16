@@ -40,6 +40,7 @@ You can check out the skill in action [here](https://www.youtube.com/edit?o=U&vi
   - [Configuring the skill](#configuring-the-skill)
   - [Configuring the skill interface: Part 1](#configuring-the-skill-interface-part-1)
   - [Configuring the lambda function](#configuring-the-lambda-function)
+  - [Creating the security profile](#creating-the-security-profile)
   - [Configuring the skill interface: Part 2](#configuring-the-skill-interface-part-1)
 
 ## Background
@@ -570,12 +571,21 @@ In [Amazon Web Services Portal](https://aws.amazon.com/), sign in, in the "AWS s
 - Choose an existing role, or create one from a template.
 - Your lambda function is created, in the *Function code* module, under *Code entry type* select *Upload a .Zip file*.
 - Browse and upload the zip file you've created in [*Configuring the skill* section](#configuring-the-skill).
-- Under *Handler info* type *lambda.handler*
+- Under *Handler info* type *lambda.handler*. Please note that the runtime is *Node.js 6.10*.
 - Scroll down to the *Basic settings* module and select time out of 8 seconds.
 - Scroll back up to the *Configuration* module and from the left bar list click on *Alexa Smart Home*.
-- In the new added *Configure triggers* module, under *Application Id* paste the application id assigned to your skill in the [*Configuring the skill interface: Part 1* section](#configuring-the-skill-interface-part-1), it looks like this *amzn1.ask.skill.#unique-skill_identifier*.
-- Save your function and don't close this tab, you're going to need it again in the next step.
+- In the new added *Configure triggers* module, under *Application Id* paste the application id assigned to your skill in the [*Configuring the skill interface: Part 1* section](#configuring-the-skill-interface-part-1), it looks like this *amzn1.ask.skill.#unique-skill_identifier*. Please note that trigger is enabled.
+- Save your function and don't close this tab, you're going to need it later.
+### Creating the security profile
+For Smart Home Skills, Amazon forces us to use *lambda* as host for the skill, which we did in previous steps, and *OAUTH 2 Authorization Framework* for identifing the users. Fourtnlly for us, Amazon also has a service called *Login with Amazon* which allows to create secutiry profile for supporting OAUTH 2. Thant means we can allow our users to login with thier amazon account instead of creating our own authrization infrastructure and manage our own users. This is espcially great for this project. Considering this skill is for personal use only and not meant to be pulished, using Amazon's security profile will save the trouble of authenticating ourselfs.</br>
+Open [Amazon Developer Portal](https://developer.amazon.com/) in a different tab (leave the current developer portal tab open, you will need it), sign in and this time click on the *APPS & SERVICES* tab and then click *Login with Amazon* sub-menu.</br>
+Click *Create a New Security Profile* and give the profile a name and a description. In the *Privacy URL* just put any url you want, you can put you ha link if you want, no one besides you is going to have access to this page. Click save to save your profile.</br>
+Go into the created profile and click on the *Web Settings* tab, you need to allow a return url, go back to original developer portal tab and click *Configuration* in the right menu. Scroll down until you see *Redirect URLs*.</br>
+- *pitangui.amazon.com* is the url for inside the US.
+- *layla.amazon.com* is for outside of the US.
+- *alexa.amazon.co.jp* is for Japan.
 
-
+If you're not sure which one to use, you can use all three, it doesn't matter, only the right one will be used anyway.</br>
+Save the security profile, but don't close the tab, you will need it for the next step.
 ### Configuring the skill interface: Part 2
-Go back to [Amazon Developer Portal](https://developer.amazon.com/), and click on the 
+Go back to [Amazon Developer Portal](https://developer.amazon.com/)(the original tab where we started creating our skill), and click on the 
