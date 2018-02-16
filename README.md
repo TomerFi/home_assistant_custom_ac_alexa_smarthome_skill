@@ -208,7 +208,7 @@ Please note that service name contains the ip address of your broadlink device, 
 ```yaml
 living_room_rm_pro_send_packet:
   sequence:
-    - service: broadlink.send_packet_XXX_XXX_XXX_XXX
+    - service: switch.broadlink_send_packet_XXX_XXX_XXX_XXX
       data_template:
         packet:
           - '{{ packet_code }}'
