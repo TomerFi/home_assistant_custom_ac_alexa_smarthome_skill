@@ -39,11 +39,22 @@ exports.handler = function (request, context) {
 
     }
 
+    function getEntityStateFromJson(data, entity_id) {
+        var state = null;
+        data.forEach(function (entity) {
+            if (entity.entity_id === entity_id) {
+                state = entity.state;
+                return state;
+            }
+        });
+        return state;
+    }
+
 /*#################################
 ###### error response makers ######
 #################################*/
 
-    //generic response
+    //generic error response
     function createErrorResponse(request, type, _msg) {
         var responseHeader = {
             namespace: "Alexa",
@@ -194,10 +205,10 @@ exports.handler = function (request, context) {
 
     function handleDiscovery(context) {
         try {
-            var ednpointsResponse = [];
+            var endpointsResponse = [];
 
             endpoints_config.forEach(function (currentEndpoint) {
-                ednpointsResponse.push({
+                endpointsResponse.push({
                     "endpointId": currentEndpoint.endpoint_unique_id,
                     "friendlyName": currentEndpoint.alexa_friendly_name,
                     "description": "AC Custom Thermostat by TomerFi",
@@ -219,7 +230,21 @@ exports.handler = function (request, context) {
                                         "name": "thermostatMode"
                                     }
                                 ],
-                                "proactivelyReported": false,
+                                "proactivelyReported": true,
+                                "retrievable": true
+                            }
+                        },
+                        {
+                            "type": "AlexaInterface",
+                            "interface": "Alexa.TemperatureSensor",
+                            "version": "3",
+                            "properties": {
+                                "supported": [
+                                    {
+                                        "name": "temperature"
+                                    }
+                                ],
+                                "proactivelyReported": true,
                                 "retrievable": true
                             }
                         },
@@ -231,24 +256,10 @@ exports.handler = function (request, context) {
                                 "supported": [{
                                     "name": "powerState"
                                 }],
-                                "proactivelyReported": false,
+                                "proactivelyReported": true,
                                 "retrievable": true
                             }
-                        },
-                        {
-		                    "type":"AlexaInterface",
-		                    "interface":"Alexa.TemperatureSensor",
-		                    "version":"3",
-		                    "properties":{
-		                       "supported":[
-		                          {
-		                             "name":"temperature"
-		                          }
-		                       ],
-		                       "proactivelyReported":false,
-		                       "retrievable":true
-		                    }
-		                }
+                        }
                     ]
                 });
             });
@@ -261,7 +272,7 @@ exports.handler = function (request, context) {
             };
 
             var responsePayload = {
-                endpoints: ednpointsResponse
+                endpoints: endpointsResponse
             };
 
             var response = {
@@ -294,78 +305,67 @@ exports.handler = function (request, context) {
         });
 
         if (gotConfig) {
-            hassApi("/api/states/" + modeEntity, "GET", null, function (err, response) {
+            hassApi("/api/states", "GET", null, function (err, response) {
                 if (!err) {
-                    var currentMode = response.state;
-                    hassApi("/api/states/" + statusEntity, "GET", null, function (err, response) {
-                        if (!err) {
-                            var currentStatus = response.state;
-                            hassApi("/api/states/" + temperatureEntity, "GET", null, function (err, response) {
-                                if (!err) {
-                                    var currentTemperature = response.state;
-                                    var sampleTimeIso = new Date().toISOString();
-                                    var responseContext = {
-                                        properties: [{
-                                            namespace: "Alexa.ThermostatController",
-                                            name: "targetSetpoint",
-                                            value: {
-                                                value: currentTemperature,
-                                                scale: "CELSIUS"
-                                            },
-                                            timeOfSample: sampleTimeIso,
-                                            uncertaintyInMilliseconds: 0
-                                        }, {
-                                            namespace: "Alexa.ThermostatController",
-                                            name: "thermostatMode",
-                                            value: currentMode,
-                                            timeOfSample: sampleTimeIso,
-                                            uncertaintyInMilliseconds: 0
-                                        }, {
-                                            namespace: "Alexa.PowerController",
-                                            name: "powerState",
-                                            value: currentStatus,
-                                            timeOfSample: sampleTimeIso,
-                                            uncertaintyInMilliseconds: 0
-                                        }, {
-                                            namespace: "Alexa.TemperatureSensor",
-                                            name: "temperature",
-                                            value: currentTemperature,
-                                            timeOfSample: sampleTimeIso,
-                                            uncertaintyInMilliseconds: 0
-                                        }]
-                                    };
+                    var currentTemperature = getEntityStateFromJson(response, temperatureEntity);
+                    var currentMode = getEntityStateFromJson(response, modeEntity);
+                    var currentStatus = getEntityStateFromJson(response, statusEntity);
 
-                                    var responseHeader = {
-                                        namespace: "Alexa",
-                                        name: "StateReport",
-                                        payloadVersion: "3",
-                                        messageId: uuidv4(),
-                                        correlationToken: request.directive.header.correlationToken
-                                    };
+                    var sampleTimeIso = new Date().toISOString();
+                    var responseContext = {
+                        properties: [{
+                            namespace: "Alexa.ThermostatController",
+                            name: "targetSetpoint",
+                            value: {
+                                value: currentTemperature,
+                                scale: "CELSIUS"
+                            },
+                            timeOfSample: sampleTimeIso,
+                            uncertaintyInMilliseconds: 0
+                        }, {
+                            namespace: "Alexa.ThermostatController",
+                            name: "thermostatMode",
+                            value: currentMode,
+                            timeOfSample: sampleTimeIso,
+                            uncertaintyInMilliseconds: 0
+                        }, {
+                            namespace: "Alexa.TemperatureSensor",
+                            name: "temperature",
+                            value: currentTemperature,
+                            timeOfSample: sampleTimeIso,
+                            uncertaintyInMilliseconds: 0
+                        }, {
+                            namespace: "Alexa.PowerController",
+                            name: "powerState",
+                            value: currentStatus,
+                            timeOfSample: sampleTimeIso,
+                            uncertaintyInMilliseconds: 0
+                        }]
+                    };
 
-                                    var responseEndpoint = {
-                                        endpointId: requestEndpointId
-                                    };
+                    var responseHeader = {
+                        namespace: "Alexa",
+                        name: "StateReport",
+                        payloadVersion: "3",
+                        messageId: uuidv4(),
+                        correlationToken: request.directive.header.correlationToken
+                    };
 
-                                    var stateResponse = {
-                                        context: responseContext,
-                                        event: {
-                                            header: responseHeader,
-                                            endpoint: responseEndpoint,
-                                            payload: {}
-                                        }
-                                    };
-                                    context.succeed(stateResponse);
-                                } else {
-                                    throw new NoSuchEndpointError("handleStateReports", "Failed to get the state for entity " + temperatureEntity + "from hass.");
-                                }
-                            });
-                        } else {
-                            throw new NoSuchEndpointError("handleStateReports", "Failed to get the state for entity " + statusEntity + "from hass.");
+                    var responseEndpoint = {
+                        endpointId: requestEndpointId
+                    };
+
+                    var stateResponse = {
+                        context: responseContext,
+                        event: {
+                            header: responseHeader,
+                            endpoint: responseEndpoint,
+                            payload: {}
                         }
-                    });
+                    };
+                    context.succeed(stateResponse);
                 } else {
-                    throw new NoSuchEndpointError("handleStateReports", "Failed to get the state for entity " + modeEntity + "from hass.");
+                    throw new NoSuchEndpointError("handleStateReports", "Failed to get states from hass.");
                 }
             });
         } else {
@@ -476,139 +476,128 @@ exports.handler = function (request, context) {
                 }
             }
 
-            hassApi("/api/states/" + temperatureEntity, "GET", null, function (err, response) {
+            hassApi("/api/states", "GET", null, function (err, response) {
                 if (!err) {
-                    var currentTemperature = response.state;
-                    hassApi("/api/states/" + modeEntity, "GET", null, function (err, response) {
+                    var currentTemperature = getEntityStateFromJson(response, temperatureEntity);
+                    var currentMode = getEntityStateFromJson(response, modeEntity);
+                    var currentStatus = getEntityStateFromJson(response, statusEntity);
+
+                    var destTemperature;
+                    var destMode;
+                    var destStatus = "On";
+
+                    switch (action) {
+                    case "SetTargetTemperature":
+                        destTemperature = request.directive.payload.targetSetpoint.value;
+                        destMode = currentMode;
+                        break;
+                    case "AdjustTargetTemperature":
+                        destTemperature = (parseInt(currentTemperature) + parseInt(request.directive.payload.targetSetpointDelta.value));
+                        if (parseInt(destTemperature) < parseInt(minDegree)) {
+                            destTemperature = minDegree;
+                        } else if (parseInt(destTemperature) > parseInt(maxDegree)) {
+                            destTemperature = maxDegree;
+                        }
+                        destMode = currentMode;
+                        break;
+                    case "SetThermostatMode":
+                        destTemperature = currentTemperature;
+                        destMode = request.directive.payload.thermostatMode.value;
+                        break;
+                    }
+
+                    var api_url;
+                    var api_body;
+                    if (action === "SetThermostatMode") {
+                        api_url = "/api/services/input_select/select_option";
+                        api_body = {
+                            entity_id: modeEntity,
+                            option: destMode
+                        };
+
+                    } else {
+                        api_url = "/api/services/input_text/set_value";
+                        api_body = {
+                            entity_id: temperatureEntity,
+                            value: destTemperature
+                        };
+                    }
+
+                    hassApi(api_url, "POST", api_body, function (err, response) {
                         if (!err) {
-                            var currentMode = response.state;
+                            var sampleTimeIso = new Date().toISOString();
 
-                            hassApi("/api/states/" + statusEntity, "GET", null, function (err, response) {
-                                if (!err) {
-                                    var currentStatus = response.state;
-                                    var destTemperature;
-                                    var destMode;
-                                    var destStatus = "On";
-                                    switch (action) {
-                                    case "SetTargetTemperature":
-                                        destTemperature = request.directive.payload.targetSetpoint.value;
-                                        destMode = currentMode;
-                                        break;
-                                    case "AdjustTargetTemperature":
-                                        destTemperature = (parseInt(currentTemperature) + parseInt(request.directive.payload.targetSetpointDelta.value));
-                                        if (parseInt(destTemperature) < parseInt(minDegree)) {
-                                            destTemperature = minDegree;
-                                        } else if (parseInt(destTemperature) > parseInt(maxDegree)) {
-                                            destTemperature = maxDegree;
-                                        }
-                                        destMode = currentMode;
-                                        break;
-                                    case "SetThermostatMode":
-                                        destTemperature = currentTemperature;
-                                        destMode = request.directive.payload.thermostatMode.value;
-                                        break;
-                                    }
+                            var responseContext = {
+                                properties: [{
+                                    namespace: "Alexa.ThermostatController",
+                                    name: "targetSetpoint",
+                                    value: {
+                                        value: destTemperature,
+                                        scale: "CELSIUS"
+                                    },
+                                    timeOfSample: sampleTimeIso,
+                                    uncertaintyInMilliseconds: 0
+                                }, {
+                                    namespace: "Alexa.ThermostatController",
+                                    name: "thermostatMode",
+                                    value: destMode,
+                                    timeOfSample: sampleTimeIso,
+                                    uncertaintyInMilliseconds: 0
+                                }, {
+                                    namespace: "Alexa.TemperatureSensor",
+                                    name: "temperature",
+                                    value: {
+                                        value: currentTemperature,
+                                        scale: "CELSIUS"
+                                    },
+                                    timeOfSample: sampleTimeIso,
+                                    uncertaintyInMilliseconds: 0
+                                }, {
+                                    namespace: "Alexa.PowerController",
+                                    name: "powerState",
+                                    value: destStatus,
+                                    timeOfSample: sampleTimeIso,
+                                    uncertaintyInMilliseconds: 0
+                                }]
+                            };
 
-                                    var api_url;
-                                    var api_body;
-                                    if (action === "SetThermostatMode") {
-                                        api_url = "/api/services/input_select/select_option";
-                                        api_body = {
-                                            entity_id: modeEntity,
-                                            option: destMode
-                                        };
+                            var responseHeader = {
+                                namespace: "Alexa",
+                                name: "Response",
+                                payloadVersion: "3",
+                                messageId: uuidv4(),
+                                correlationToken: request.directive.header.correlationToken
+                            };
 
-                                    } else {
-                                        api_url = "/api/services/input_text/set_value";
-                                        api_body = {
-                                            entity_id: temperatureEntity,
-                                            value: destTemperature
-                                        };
-                                    }
+                            var responseEndpoint = {
+                                endpointId: requestEndpointId
+                            };
 
-                                    hassApi(api_url, "POST", api_body, function (err, response) {
-                                        if (!err) {
-                                            var sampleTimeIso = new Date().toISOString();
-
-                                            var responseContext = {
-                                                properties: [{
-                                                    namespace: "Alexa.ThermostatController",
-                                                    name: "targetSetpoint",
-                                                    value: {
-                                                        value: destTemperature,
-                                                        scale: "CELSIUS"
-                                                    },
-                                                    timeOfSample: sampleTimeIso,
-                                                    uncertaintyInMilliseconds: 0
-                                                }, {
-                                                    namespace: "Alexa.ThermostatController",
-                                                    name: "thermostatMode",
-                                                    value: destMode,
-                                                    timeOfSample: sampleTimeIso,
-                                                    uncertaintyInMilliseconds: 0
-                                                }, {
-                                                    namespace: "Alexa.TemperatureSensor",
-                                                    name: "temperature",
-                                                    value: {
-                                                        value: currentTemperature,
-                                                        scale: "CELSIUS"
-                                                    },
-                                                    timeOfSample: sampleTimeIso,
-                                                    uncertaintyInMilliseconds: 0
-                                                }, {
-                                                    namespace: "Alexa.PowerController",
-                                                    name: "powerState",
-                                                    value: destStatus,
-                                                    timeOfSample: sampleTimeIso,
-                                                    uncertaintyInMilliseconds: 0
-                                                }]
-                                            };
-
-                                            var responseHeader = {
-                                                namespace: "Alexa",
-                                                name: "Response",
-                                                payloadVersion: "3",
-                                                messageId: uuidv4(),
-                                                correlationToken: request.directive.header.correlationToken
-                                            };
-
-                                            var responseEndpoint = {
-                                                endpointId: requestEndpointId
-                                            };
-
-                                            var thermostatResponse = {
-                                                context: responseContext,
-                                                event: {
-                                                    header: responseHeader,
-                                                    endpoint: responseEndpoint,
-                                                    payload: {}
-                                                }
-                                            };
-
-                                            if (currentStatus.toLowerCase() === "off") {
-                                                var statusBody = {
-                                                    entity_id: statusEntity
-                                                };
-                                                hassApi("/api/services/input_boolean/turn_on", "POST", statusBody, function (err, response) {
-                                                    if (!err) {
-                                                        context.succeed(thermostatResponse);
-                                                    } else {
-                                                        throw new ThermostatIsOffError("handleThermostatController", "Entity " + statusEntity + " is not responding.");
-                                                    }
-                                                });
-                                            } else {
-                                                context.succeed(thermostatResponse);
-                                            }
-                                        } else {
-                                            throw new BridgeUnreachableError("handleThermostatController");
-                                        }
-                                    });
-                                } else {
-                                    throw new NoSuchEndpointError("handleThermostatController", "Failed to get the state for entity " + statusEntity + "from hass.");
+                            var thermostatResponse = {
+                                context: responseContext,
+                                event: {
+                                    header: responseHeader,
+                                    endpoint: responseEndpoint,
+                                    payload: {}
                                 }
-                            });
+                            };
+
+                            if (currentStatus.toLowerCase() === "off") {
+                                var statusBody = {
+                                    entity_id: statusEntity
+                                };
+                                hassApi("/api/services/input_boolean/turn_on", "POST", statusBody, function (err, response) {
+                                    if (!err) {
+                                        context.succeed(thermostatResponse);
+                                    } else {
+                                        throw new ThermostatIsOffError("handleThermostatController", "Entity " + statusEntity + " is not responding.");
+                                    }
+                                });
+                            } else {
+                                context.succeed(thermostatResponse);
+                            }
                         } else {
-                            throw new NoSuchEndpointError("handleThermostatController", "Failed to get the state for entity " + modeEntity + "from hass.");
+                            throw new BridgeUnreachableError("handleThermostatController");
                         }
                     });
                 } else {
@@ -623,6 +612,7 @@ exports.handler = function (request, context) {
 /*#################################
 ############ main code ############
 #################################*/
+    // logger("DEBUG: ", "request: ", JSON.stringify(request));
     var namespace = request.directive.header.namespace;
     var name = request.directive.header.name;
 
