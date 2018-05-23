@@ -462,7 +462,7 @@ The following automation executes whenever the state for our *input_boolean* ent
   action:
     service: script.living_room_ac_check_state_script
     data_template:
-      selected_state: '{{ states.input_select.lr_ac_mode.state }}'
+      selected_mode: '{{ states.input_select.lr_ac_mode.state }}'
       selected_fan: '{{ states.input_select.lr_ac_fan.state }}'
       selected_temp: '{{ states.sensor.lr_ac_temp_sensor.state }}'
 ```
@@ -499,7 +499,7 @@ The following script runs whenever one of the controllers for mode (input_select
       state: 'on'
     - service: script.living_room_ac_check_state_script
       data_template:
-        selected_state: '{{ states.input_select.lr_ac_mode.state }}'
+        selected_mode: '{{ states.input_select.lr_ac_mode.state }}'
         selected_fan: '{{ states.input_select.lr_ac_fan.state }}'
         selected_temp: '{{ states.sensor.lr_ac_temp_sensor.state }}'
 ```
